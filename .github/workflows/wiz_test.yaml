@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SCAN_PATH: "." # Set the relative path in the repo to build the image from
-      TAG: "docker-tag" # Set the tag to use for the image
+      TAG: ${{ github.sha }} # Set the tag to use for the image
       POLICY: "Default vulnerabilities policy" # Set the desired Wiz CLI policy to use
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
@@ -23,7 +23,7 @@ jobs:
     # It's possible to skip this step if this job is scheduled after an image-build job.
     # If that's the case, also set "Run wiz CLI docker image scan" step accordingly
     - name: Build the Docker image
-      run: cd $SCAN_PATH && docker build . --tag ${{ github.sha }} # Configure to fit the params you use to build your image
+      run: cd $SCAN_PATH && docker build . --tag $TAG # Configure to fit the params you use to build your image
 
     - name: Download Wiz CLI
       run: curl -o wizcli https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64 && chmod +x wizcli
